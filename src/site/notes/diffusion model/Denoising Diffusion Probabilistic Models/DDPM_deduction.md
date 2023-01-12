@@ -47,7 +47,7 @@ q(\mathbf{x}_{t-1}|\mathbf{x}_{0})&=&\int\frac{1}{\sqrt{2\pi(1-\bar{\alpha}_{t-1
 q(\mathbf{x}_{t}|\mathbf{x}_{0})&=&\int\frac{1}{\sqrt{2\pi(1-\bar{\alpha}_{t})}}e^{-\frac{(\mathbf{x}_{t}-\sqrt{\bar{\alpha}_{t}}\mathbf{x}_{0})^2}{2(1-\bar{\alpha}_{t})}}d\mathbf{x}_{t}
 \end{eqnarray}
 $$
-back to Eq(4):
+Back to Eq(4):
 $$
 \begin{eqnarray}
 q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})
@@ -95,7 +95,7 @@ I:=&exp&[-\frac{(\mathbf{x}_t-\sqrt{\alpha_t}\mathbf{x}_{t-1})^2}{2(1-\alpha_t)}
 \mathbf{x}^2_{t-1}-
 2\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_t}\mathbf{x}_0}{1-\bar\alpha_t
 }\mathbf{x}_{t-1}+C\widetilde\beta_t
-]]\\
+]]\tag{6}\\
 
 \end{eqnarray}
 $$
@@ -119,11 +119,55 @@ C\widetilde\beta_t&=&(\frac{\mathbf{x}_t^2}{1-\alpha_t}+
 2\sqrt{\bar\alpha_t}(1-\alpha_t)(1-\bar\alpha_{t-1})\mathbf{x_t}\mathbf{x_0}
 }
 {(1-\bar\alpha_t)^2}\\
-&=&(\frac{}{1-\bar\alpha_t})^2
+&=&(\frac{\sqrt{(\alpha_t-\bar\alpha_t)(1-\bar\alpha_{t-1})}\mathbf{x_t+\sqrt{(1-\alpha_t)(\bar\alpha_{t-1}-\bar\alpha_t)}\mathbf{x_0}}}{1-\bar\alpha_t})^2
 \end{eqnarray}
 $$
+Recall Eq(5), Eq(6),
+$$
+\begin{eqnarray}
+q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})
+&=&\frac{1}{\sqrt{2\pi \frac{(1-\alpha_{t})(1-\bar{\alpha}_{t-1})}{(1-\bar{\alpha}_{t})}}}\int e^{-\frac{(\mathbf{x}_t-\sqrt{\alpha_t}\mathbf{x}_{t-1})^2}{2(1-\alpha_t)}-\frac{(\mathbf{x}_{t-1}-\sqrt{\bar\alpha_{t-1}}\mathbf{x}_{0})^2}{2(1-\bar\alpha_{t-1})}+\frac{(\mathbf{x}_{t}-\sqrt{\bar\alpha_{t}}\mathbf{x}_{0})^2}{2(1-\bar\alpha_{t})}}d\mathbf{x}_{t-1}\\
+&=&\frac{1}{\sqrt{2\pi\widetilde{\beta}_t}}
+\int e^{
+[
+-\frac{1}{2\widetilde\beta_t}[
+\mathbf{x}^2_{t-1}-
+2\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_t}\mathbf{x}_0}{1-\bar\alpha_t
+}\mathbf{x}_{t-1}+C\widetilde\beta_t
+]]}
+d\mathbf{x}_{t-1}\\
+&=&\frac{1}{\sqrt{2\pi\widetilde{\beta}_t}}
+\int e^{
 
+-\frac{(
+\mathbf{x}_{t-1}-
+\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_t}\mathbf{x}_0}{1-\bar\alpha_t
+}
+)^2}{2\widetilde\beta_t}}
+d\mathbf{x}_{t-1}\\
 
+\end{eqnarray}
+$$
+Define 
+$$\widetilde\mu_t:=\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_t}\mathbf{x}_0}{1-\bar\alpha_t
+}$$
+Finally we have the following Gaussion distribution:
+$$
+\begin{eqnarray}
+q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})
+&=&\frac{1}{\sqrt{2\pi\widetilde{\beta}_t}}
+\int e^{
+-\frac{(
+\mathbf{x}_{t-1}-
+\widetilde\mu_t)^2}{2\widetilde\beta_t}}
+d\mathbf{x}_{t-1}\\
+\end{eqnarray}
+$$
+or
+$$q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})=N(\mathbf{x}_{t-1};\widetilde{\mu}_t,\widetilde{\beta}_tI)$$
+$$
+\mathbf{x}_{t-1}=\widetilde{\mu}_t+\sqrt{\widetilde{\beta}_t}\epsilon
+$$
 
 
 # Loss Function
