@@ -208,6 +208,21 @@ $$
 
 \end{eqnarray}
 $$
-
+> [!faq] 
+>  **Q1:Why using estimation $\widetilde\epsilon(\mathbf{x}_t,t)$ instead of $\epsilon$? **
+>  
+>  Because during diffusion process, the noise image is sampled by
+>   $$\mathbf{x}_t=\sqrt{\bar{\alpha}_t}\mathbf{x}_{0}+\sqrt{1-\bar{\alpha_t}}\epsilon $$
+>   Of course we can reverse this process with this specific noise image $\mathbf{x}_t$ and noise $\epsilon$ to reconstruct this specfic $\mathbf{x}_0$ by
+>   $$\mathbf{x}_0=\frac{1}{\sqrt{\bar\alpha_t}}(\mathbf{x}_t-\sqrt{1-\bar\alpha_t}\epsilon)$$
+>   However, in the reverse process, we want to construct a real image from **random noise $\epsilon_r$**. Notice that the random noise $\mathbf{x}_t=\epsilon_r$ **does not equal** to the specific noise image $\mathbf{x}_t$, so we are **unable** to reconstruct $\mathbf{x}_0$ by 
+>   $$\mathbf{x}_0=\frac{1}{\sqrt{\bar\alpha_t}}(\epsilon_r-\sqrt{1-\bar\alpha_t}\epsilon)$$
+>   So a simple idea comes out that we can generate many noise images $\mathbf{x}_{it}$ from different real images $\mathbf{x}_{i0}$ and different diffusion steps $t$ with different noise $\epsilon_i$.
+>   $$\mathbf{x}_{it}=\sqrt{\bar{\alpha}_{it}}\mathbf{x}_{i0}+\sqrt{1-\bar{\alpha_{it}}}\epsilon_{i}\quad(i=1,2,...,batchsize) $$
+>    Then utilize deep learning methods (Unet+attention) to mining the relationship between $\mathbf{x}_{it}$ and $\epsilon_{i}$. That is to say, learning
+>    $$\epsilon_{i}(\mathbf{x}_{it},t)$$ 
+>    Consequencely, with random noise $\mathbf{x}_t=\epsilon_r$, we can find the correspound $\epsilon$ which is able to construct $\mathbf{x}_0$
+>    
+ 
 
 # Loss Function
