@@ -18,8 +18,13 @@ $$
 &=&\sqrt{\bar{\alpha_t}}\mathbf{x}_{0}+\sqrt{1-\bar{\alpha_t}}\epsilon \quad\quad\quad\quad\quad (\bar{\alpha_t}:=\sideset{}{}\prod_{i=0}^t\alpha_i)\tag{2}
 \end{eqnarray}
 $$
+{ #4610ab}
+
+
 In other words,
 $$q(\mathbf{x}_t|\mathbf{x}_{0}):=N(\mathbf{x}_{0};\sqrt{\bar{\alpha_t}}\mathbf{x}_{0},(1-\bar{\alpha_t})\mathbf{I})\tag{3}$$
+{ #49f4b9}
+
 
 # Reverse Process
 Using Bayes' rule, we have:
@@ -30,13 +35,24 @@ q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})&=&\frac{q(\mathbf{x}_{t-1},\ma
 &=&\frac{q(\mathbf{x}_{t}|\mathbf{x}_{t-1})q(\mathbf{x}_{t-1}|\mathbf{x}_{0})}{q(\mathbf{x}_{t}|\mathbf{x}_{0})} \quad\quad\tag{4}
 \end{eqnarray}
 $$
+{ #a3f8ba}
+
+
 The last step above is based on the property of Markov process $q(\mathbf{x}_{t}|\mathbf{x}_{t-1},\mathbf{x}_{0})=q(\mathbf{x}_{t}|\mathbf{x}_{t-1})$
-From Eq(2) and Eq(3) we have:
+From [[diffusion model/Denoising Diffusion Probabilistic Models/DDPM_deduction#^4610ab\|Eq[2]]] and [[diffusion model/Denoising Diffusion Probabilistic Models/DDPM_deduction#^49f4b9\|Eq(3)]] we have:
 $$
 \begin{eqnarray}
-q(\mathbf{x}_{t}|\mathbf{x}_{t-1})&=&\sqrt{\alpha_t}\mathbf{x}_{t-1}+\sqrt{1-\alpha_t}\epsilon \thicksim N(\mathbf{x}_{t};\sqrt{\alpha_t}\mathbf{x}_{t-1},(1-\alpha_t)\mathbf{I})\\
-q(\mathbf{x}_{t-1}|\mathbf{x}_{0})&=&\sqrt{\bar{\alpha}_{t-1}}\mathbf{x}_{0}+\sqrt{1-\bar{\alpha}_{t-1}}\epsilon \thicksim N(\mathbf{x}_{t-1};\sqrt{\bar{\alpha}_{t-1}}\mathbf{x}_{0},(1-\bar{\alpha}_{t-1})\mathbf{I})\\
-q(\mathbf{x}_{t}|\mathbf{x}_{0})&=&\sqrt{\bar{\alpha}_{t}}\mathbf{x}_{0}+\sqrt{1-\bar{\alpha}_{t}}\epsilon \thicksim N(\mathbf{x}_{t};\sqrt{\bar{\alpha_t}}\mathbf{x}_{0},(1-\bar{\alpha_t})\mathbf{I})
+q(\mathbf{x}_{t}|\mathbf{x}_{t-1})&=&  N(\mathbf{x}_{t};\sqrt{\alpha_t}\mathbf{x}_{t-1},(1-\alpha_t)\mathbf{I})\\
+q(\mathbf{x}_{t-1}|\mathbf{x}_{0})&=& N(\mathbf{x}_{t-1};\sqrt{\bar{\alpha}_{t-1}}\mathbf{x}_{0},(1-\bar{\alpha}_{t-1})\mathbf{I})\\
+q(\mathbf{x}_{t}|\mathbf{x}_{0})&=&N(\mathbf{x}_{t};\sqrt{\bar{\alpha_t}}\mathbf{x}_{0},(1-\bar{\alpha_t})\mathbf{I})
+\end{eqnarray}
+$$
+or
+$$
+\begin{eqnarray}
+\mathbf{x}_t&=&\sqrt{\alpha_t}\mathbf{x}_{t-1}+\sqrt{1-\alpha_t}\epsilon\\
+\mathbf{x}_{t-1}&=&\sqrt{\bar{\alpha}_{t-1}}\mathbf{x}_{0}+\sqrt{1-\bar{\alpha}_{t-1}}\epsilon\\
+\mathbf{x}_t&=&\sqrt{\bar{\alpha}_{t}}\mathbf{x}_{0}+\sqrt{1-\bar{\alpha}_{t}}\epsilon 
 \end{eqnarray}
 $$
 so
@@ -47,7 +63,7 @@ q(\mathbf{x}_{t-1}|\mathbf{x}_{0})&=&\int\frac{1}{\sqrt{2\pi(1-\bar{\alpha}_{t-1
 q(\mathbf{x}_{t}|\mathbf{x}_{0})&=&\int\frac{1}{\sqrt{2\pi(1-\bar{\alpha}_{t})}}e^{-\frac{(\mathbf{x}_{t}-\sqrt{\bar{\alpha}_{t}}\mathbf{x}_{0})^2}{2(1-\bar{\alpha}_{t})}}d\mathbf{x}_{t}
 \end{eqnarray}
 $$
-Back to Eq(4):
+Back to [[diffusion model/Denoising Diffusion Probabilistic Models/DDPM_deduction#^a3f8ba\|Eq(4)]]:
 $$
 \begin{eqnarray}
 q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})
@@ -58,47 +74,53 @@ q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})
 
 \end{eqnarray}
 $$
-Use $I$ to denote integrand function in Eq(5), 
+{ #c9714c}
+
+
+Use $I$ to denote integrand function, 
 $$
 \begin{eqnarray}
 I:=&exp&[-\frac{(\mathbf{x}_t-\sqrt{\alpha_t}\mathbf{x}_{t-1})^2}{2(1-\alpha_t)}-\frac{(\mathbf{x}_{t-1}-\sqrt{\bar\alpha_{t-1}}\mathbf{x}_{0})^2}{2(1-\bar\alpha_{t-1})}+\frac{(\mathbf{x}_{t}-\sqrt{\bar\alpha_{t}}\mathbf{x}_{0})^2}{2(1-\bar\alpha_{t})}]\\
 =&exp&[-\frac{1}{2}[\frac{\mathbf{x}_t^2+\alpha_t\mathbf{x}^2_{t-1}-2\sqrt{\alpha_t}\mathbf{x}_t\mathbf{x}_{t-1}}{1-\alpha_t}+
-\frac{\mathbf{x}_{t-1}^2+\bar{\alpha}_{t-1}\mathbf{x}^2_{0}-2\sqrt{\bar{\alpha}_t}\mathbf{x}_{t-1}\mathbf{x}_{0}}{1-\bar\alpha_{t-1}}\\
-&&-
+\frac{\mathbf{x}_{t-1}^2+\bar{\alpha}_{t-1}\mathbf{x}^2_{0}-2\sqrt{\bar{\alpha}_{t-1}}\mathbf{x}_{t-1}\mathbf{x}_{0}}{1-\bar\alpha_{t-1}}
+-
 \frac{\mathbf{x}_t^2+\bar\alpha_t\mathbf{x}^2_{0}-2\sqrt{\bar\alpha_t}\mathbf{x}_t\mathbf{x}_{0}}{1-\bar\alpha_{t}}]]\\
 =&exp&[
 -\frac{1}{2}[
 (\frac{\alpha_t}{1-\alpha_t}+\frac{1}{1-\bar\alpha_{t-1}})\mathbf{x}^2_{t-1}-
-(\frac{2\sqrt{\alpha_t}}{1-\alpha_t}\mathbf{x}_t+\frac{2\sqrt{\bar\alpha_t}}{1-\bar\alpha_{t-1}}\mathbf{x}_0)\mathbf{x}_{t-1}+C
+(\frac{2\sqrt{\alpha_t}}{1-\alpha_t}\mathbf{x}_t+\frac{2\sqrt{\bar\alpha_{t-1}}}{1-\bar\alpha_{t-1}}\mathbf{x}_0)\mathbf{x}_{t-1}+C
 ]]\\
 =&exp&[
 -\frac{1}{2}[
 \frac{1-\alpha_t\bar\alpha_{t-1}}{(1-\alpha_t)(1-\bar\alpha_{t-1})}\mathbf{x}^2_{t-1}-
-2(\frac{\sqrt{\alpha_t}}{1-\alpha_t}\mathbf{x}_t+\frac{\sqrt{\bar\alpha_t}}{1-\bar\alpha_{t-1}}\mathbf{x}_0)\mathbf{x}_{t-1}+C
+2(\frac{\sqrt{\alpha_t}}{1-\alpha_t}\mathbf{x}_t+\frac{\sqrt{\bar\alpha_{t-1}}}{1-\bar\alpha_{t-1}}\mathbf{x}_0)\mathbf{x}_{t-1}+C
 ]]\\
 \xlongequal{\bar\alpha_t=\alpha_t\bar\alpha_{t-1}}&exp&
 [
 -\frac{1}{2}[
 \frac{1-\bar\alpha_{t}}{(1-\alpha_t)(1-\bar\alpha_{t-1})}\mathbf{x}^2_{t-1}-
-2(\frac{\sqrt{\alpha_t}}{1-\alpha_t}\mathbf{x}_t+\frac{\sqrt{\bar\alpha_t}}{1-\bar\alpha_{t-1}}\mathbf{x}_0)\mathbf{x}_{t-1}+C
+2(\frac{\sqrt{\alpha_t}}{1-\alpha_t}\mathbf{x}_t+\frac{\sqrt{\bar\alpha_{t-1}}}{1-\bar\alpha_{t-1}}\mathbf{x}_0)\mathbf{x}_{t-1}+C
 ]]\\
 \xlongequal{\widetilde\beta_t:=\frac{(1-\alpha_t)(1-\bar\alpha_{t-1})}{1-\bar\alpha_{t}}}&exp&
 [
 -\frac{1}{2\widetilde\beta_t}[
 \mathbf{x}^2_{t-1}-
-2\frac{\frac{\sqrt{\alpha_t}\mathbf{x}_t}{1-\alpha_t}+\frac{\sqrt{\bar\alpha_t}\mathbf{x}_0}{1-\bar\alpha_{t-1}}}{\frac{1-\bar\alpha_{t}}{(1-\alpha_t)(1-\bar\alpha_{t-1})}
+2\frac{\frac{\sqrt{\alpha_t}\mathbf{x}_t}{1-\alpha_t}+\frac{\sqrt{\bar\alpha_{t-1}}\mathbf{x}_0}{1-\bar\alpha_{t-1}}}{\frac{1-\bar\alpha_{t}}{(1-\alpha_t)(1-\bar\alpha_{t-1})}
 }\mathbf{x}_{t-1}+C\widetilde\beta_t
 ]]\\
 =&exp&
 [
 -\frac{1}{2\widetilde\beta_t}[
 \mathbf{x}^2_{t-1}-
-2\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_t}\mathbf{x}_0}{1-\bar\alpha_t
+2\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_{t-1}}\mathbf{x}_0}{1-\bar\alpha_t
 }\mathbf{x}_{t-1}+C\widetilde\beta_t
 ]]\tag{6}\\
 
 \end{eqnarray}
 $$
+{ #e426f0}
+
+
 where
 $$
 \begin{eqnarray}
@@ -119,10 +141,12 @@ C\widetilde\beta_t&=&(\frac{\mathbf{x}_t^2}{1-\alpha_t}+
 2\sqrt{\bar\alpha_t}(1-\alpha_t)(1-\bar\alpha_{t-1})\mathbf{x_t}\mathbf{x_0}
 }
 {(1-\bar\alpha_t)^2}\\
-&=&(\frac{\sqrt{(\alpha_t-\bar\alpha_t)(1-\bar\alpha_{t-1})}\mathbf{x_t+\sqrt{(1-\alpha_t)(\bar\alpha_{t-1}-\bar\alpha_t)}\mathbf{x_0}}}{1-\bar\alpha_t})^2
+&=&(\frac{\sqrt{(\alpha_t-\bar\alpha_t)(1-\bar\alpha_{t-1})}\mathbf{x_t+\sqrt{(1-\alpha_t)(\bar\alpha_{t-1}-\bar\alpha_t)}\mathbf{x_0}}}{1-\bar\alpha_t})^2\\
+&=&(\frac{\sqrt{\alpha_t(1-\bar\alpha_{t-1})(1-\bar\alpha_{t-1})}\mathbf{x_t+\sqrt{\bar\alpha_{t-1}(1-\alpha_t)(1-\alpha_t)}\mathbf{x_0}}}{1-\bar\alpha_t})^2\\
+&=&(\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x_t+(1-\alpha_t)\sqrt{\bar\alpha_{t-1}}\mathbf{x_0}}}{1-\bar\alpha_t})^2\\
 \end{eqnarray}
 $$
-Recall Eq(5), Eq(6),
+Recall [[diffusion model/Denoising Diffusion Probabilistic Models/DDPM_deduction#^c9714c\|Eq(5)]], [[diffusion model/Denoising Diffusion Probabilistic Models/DDPM_deduction#^e426f0\|Eq(6)]],
 $$
 \begin{eqnarray}
 q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})
@@ -132,7 +156,7 @@ q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})
 [
 -\frac{1}{2\widetilde\beta_t}[
 \mathbf{x}^2_{t-1}-
-2\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_t}\mathbf{x}_0}{1-\bar\alpha_t
+2\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_{t-1}}\mathbf{x}_0}{1-\bar\alpha_t
 }\mathbf{x}_{t-1}+C\widetilde\beta_t
 ]]}
 d\mathbf{x}_{t-1}\\
@@ -141,7 +165,7 @@ d\mathbf{x}_{t-1}\\
 
 -\frac{(
 \mathbf{x}_{t-1}-
-\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_t}\mathbf{x}_0}{1-\bar\alpha_t
+\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_{t-1}}\mathbf{x}_0}{1-\bar\alpha_t
 }
 )^2}{2\widetilde\beta_t}}
 d\mathbf{x}_{t-1}\\
@@ -149,7 +173,7 @@ d\mathbf{x}_{t-1}\\
 \end{eqnarray}
 $$
 Define 
-$$\widetilde\mu_t:=\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_t}\mathbf{x}_0}{1-\bar\alpha_t
+$$\widetilde\mu_t:=\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_{t-1}}\mathbf{x}_0}{1-\bar\alpha_t
 }$$
 Finally we have the following Gaussion distribution:
 $$
@@ -164,9 +188,25 @@ d\mathbf{x}_{t-1}\\
 \end{eqnarray}
 $$
 or
-$$q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})=N(\mathbf{x}_{t-1};\widetilde{\mu}_t,\widetilde{\beta}_tI)$$
 $$
-\mathbf{x}_{t-1}=\widetilde{\mu}_t+\sqrt{\widetilde{\beta}_t}\epsilon
+\begin{eqnarray}
+q(\mathbf{x}_{t-1}|\mathbf{x}_{t},\mathbf{x}_{0})&=&N(\mathbf{x}_{t-1};\widetilde{\mu}_t,\widetilde{\beta}_tI)\\
+\mathbf{x}_{t-1}&=&\widetilde{\mu}_t+\sqrt{\widetilde{\beta}_t}\epsilon\\
+&=&\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_{t-1}}\mathbf{x}_0}{1-\bar\alpha_t}+\sqrt{\frac{(1-\alpha_t)(1-\bar\alpha_{t-1})}{1-\bar\alpha_{t}}}\epsilon\\
+&=&\frac{(1-\bar\alpha_{t-1})\sqrt{\alpha_t}\mathbf{x}_t+(1-\alpha_t)\sqrt{\bar\alpha_{t-1}}\mathbf{x}_0}{1-\bar\alpha_t}+\sqrt{\frac{(1-\bar\alpha_{t-1})\beta_t}{1-\bar\alpha_{t}}}\epsilon\\
+
+
+\end{eqnarray}
+$$
+Thanks to [[diffusion model/Denoising Diffusion Probabilistic Models/DDPM_deduction#^4610ab\|Eq(2)]], we can represent $\mathbf{x}_0=\frac{1}{\sqrt{\bar\alpha_t}}(\mathbf{x}_t-\sqrt{1-\bar\alpha_t}\widetilde\epsilon)$, where $\widetilde\epsilon(\mathbf{x}_t,t)$ denote the noise  estimated by model (Unet+attention)
+$$
+\begin{eqnarray}
+\mathbf{x}_{t-1}
+&=&\frac{1}{\sqrt{\alpha_t}}(\mathbf{x}_t-\frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\widetilde\epsilon)+
+\sqrt{\frac{(1-\bar\alpha_{t-1})\beta_t}{1-\bar\alpha_{t}}}\epsilon\\
+
+
+\end{eqnarray}
 $$
 
 
