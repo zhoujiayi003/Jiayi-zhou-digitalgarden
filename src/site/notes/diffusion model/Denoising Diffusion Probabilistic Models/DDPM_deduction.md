@@ -3,8 +3,7 @@
 ---
 
 
-# Diffusion Process
-Define how to add noise in each step, or $\mathbf{x_t}=f(\mathbf{x_{t-1}})$ :
+
 $$q(\mathbf{x}_t|\mathbf{x}_{t-1}):=N(\mathbf{x}_{t};\sqrt{1-\beta_t}\mathbf{x}_{t-1},\beta_t\mathbf{I})\tag{1}$$
 using reparameterization trick, 
 $$
